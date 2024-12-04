@@ -1,0 +1,11 @@
+{
+  "name": "club-connect-backend",
+  "version": "1.0.0",
+  "description": "Backend Node.Js server for club connect web application",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
