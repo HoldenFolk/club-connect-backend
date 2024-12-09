@@ -1,38 +1,41 @@
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const Users = require("../models/User");
+require("dotenv").config(); // Load environment variables
 
-const login = async (req, res) => {
+// Load the private key from .env
+const privateKey = process.env.PRIVATE_KEY;
+
+// Sign a JWT
+const signToken = (payload) => {
+    return jwt.sign(payload, privateKey, { algorithm: "RS256", expiresIn: "48h" });
+};
+
+// Login a user
+const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-        return res.status(400).json({ error: "Email and password are required" });
+        return res.status(400).json({ error: "Missing email or password" });
     }
 
     try {
-        // Find user by email
-        const user = await Users.findOne({ email }).select("+password");
+        const user = await Users.findOne({ email });
         if (!user) {
-            return res.status(401).json({ error: "Invalid email or password" });
+            return res.status(404).json({ error: "User not found" });
         }
 
-        // Compare passwords
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch) {
-            return res.status(401).json({ error: "Invalid email or password" });
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ error: "Invalid credentials" });
         }
 
-        // Return user data (exclude sensitive fields)
-        res.status(200).json({
-            id: user.userID,
-            email: user.email,
-            username: user.username,
-            profilePicture: user.profilePicture,
-            publicKey: user.publicKey,
-        });
+        const token = signToken({ id: user._id, username: user.username });
+        res.status(200).json({ message: "Login successful", token });
     } catch (error) {
-        console.error(error);
+        console.error("Error logging in user:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 };
 
-module.exports = { login };
+module.exports = {loginUser} ;

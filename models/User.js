@@ -1,20 +1,22 @@
+// Users(userID, email, username, password, publicKey)
+
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
 const UserSchema = new Schema(
     {
         userID: {
-            type: String,
+            type: Number,
             unique: true,
-            required: [true, "User ID is required"],
+            required: true
         },
         email: {
             type: String,
             unique: true,
             required: [true, "Email is required"],
             match: [
-                /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                "Email is invalid",
+                /^[a-zA-Z0-9._%+-]+@(mail\.mcgill\.ca|mcgill\.ca)$/,
+                "Email must be a valid @mail.mcgill.ca or @mcgill.ca address",
             ],
         },
         username: {
@@ -22,15 +24,10 @@ const UserSchema = new Schema(
             required: [true, "Username is required"],
             unique: true,
         },
-        email:{
-            type: String,
-            required: [true, "Email is required"],
-            unique: true,
-        },
-        profilePicture: {
-            type: String,
-            default: null, // Can be null if no profile picture is uploaded
-        },
+        // profilePicture: {
+        //     type: String,
+        //     default: null, // Can be null if no profile picture is uploaded
+        // },
         password: {
             type: String,
             required: [true, "Password is required"],
@@ -43,7 +40,7 @@ const UserSchema = new Schema(
     },
     {
         timestamps: true, // Automatically adds `createdAt` and `updatedAt` fields
-        collection: "Users"
+        collection: "Users",
     }
 );
 

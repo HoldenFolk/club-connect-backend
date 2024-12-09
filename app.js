@@ -1,8 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 // const helmet = require("helmet");
-
 const app = express();
+
+const clubRoutes = require("./routes/clubRoutes");
+const userRoutes = require("./routes/userRoutes");
+const authRoutes = require("./routes/authRoutes"); 
+const eventRoutes = require("./routes/eventRoutes"); 
 
 // Middleware
 app.use(cors());
@@ -16,8 +20,10 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/clubs", clubRoutes);
+app.use("/api/events", eventRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {
