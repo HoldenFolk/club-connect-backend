@@ -31,7 +31,7 @@ const loginUser = async (req, res) => {
         }
 
         const token = signToken({ id: user._id, username: user.username });
-        res.status(200).json({ message: "Login successful", token });
+        res.status(200).json({ message: "Login successful", token, user });
     } catch (error) {
         console.error("Error logging in user:", error);
         res.status(500).json({ error: "Internal server error" });
