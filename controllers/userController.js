@@ -77,4 +77,48 @@ const registerUser = async (req, res) => {
 //     }
 // };
 
-module.exports = { registerUser}; //, getUserById };
+// Update a user by their ID
+const updateUserById = async (req, res) => {
+    const { userID } = req.params;
+    const { email, username, password } = req.body;
+
+    try {
+        // Find the user by userID
+        const user = await Users.findOne({ userID });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        // Update the fields if provided
+        if (email) {
+            user.email = email;
+        }
+
+        if (username) {
+            user.username = username;
+        }
+
+        if (password) {
+            // Hash the new password before saving
+            user.password = await bcrypt.hash(password, 10);
+        }
+
+        // Save the updated user
+        const updatedUser = await user.save();
+
+        res.status(200).json({
+            message: "User updated successfully",
+            user: {
+                id: updatedUser.userID,
+                email: updatedUser.email,
+                username: updatedUser.username,
+                publicKey: updatedUser.publicKey,
+            },
+        });
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+module.exports = { registerUser, getUserById, updateUserById };

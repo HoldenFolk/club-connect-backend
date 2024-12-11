@@ -43,21 +43,8 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ error: "Invalid credentials" });
         }
 
-        // Generate token with user details including public key
-        const token = signToken({
-            id: user._id,
-            username: user.username,
-            publicKey: user.publicKey // Include user's public key in token
-        });
-
-        // Respond with successful login
-        res.status(200).json({
-            message: "Login successful",
-            token,
-            userID: user.userID,
-            username: user.username,
-            // publicKey: user.publicKey // Optional: send public key to client
-        });
+        const token = signToken({ id: user._id, username: user.username });
+        res.status(200).json({ message: "Login successful", token, user });
     } catch (error) {
         console.error("Error logging in user:", error);
         res.status(500).json({ error: "Internal server error" });
