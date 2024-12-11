@@ -6,7 +6,8 @@ const router = express.Router();
 
 // Route for creating a club (requires authentication)
 // router.post("/create", authMiddleware, createClub);
-router.post("/create", createClub);
-router.get("/:clubID", getClubById);
+router.post("/create", authMiddleware, createClub);
+// router.get("/:clubID", getClubById);
+router.post("/:clubID", authMiddleware, getClubById);
 
 module.exports = router;

@@ -1,10 +1,15 @@
 const Club = require("../models/Club");
 const User = require("../models/User");
+const Moderator = require("../models/Moderator");
+
+require("dotenv").config();
 
 // Create a new club
 const createClub = async (req, res) => {
-    const { name, description, category, banner, logo, website, email } = req.body;
-    // const userId = req.user.userID; // Assuming `req.user` is populated by an authentication middleware
+    const { name, description, category, banner, logo, website, email, verified, followers } = req.body;
+    const userID = req.user.userID; // Assuming `req.user` is populated by an authentication middleware
+
+    console.log(userID)
 
     // Validate mandatory fields
     if (!name || !description || !category) {
@@ -31,12 +36,21 @@ const createClub = async (req, res) => {
             logo: logo || null,
             website: website || null,
             email: email || null,
+            verified: verified || false,
             // moderators: [userId] || null, // Add the creator as the first moderator
             // createdBy: userId || null,
         });
 
+        // Add the current user as a moderator for this club
+        const existingMod = await Moderator.findOne({ userID, clubID });
+        if (!existingMod) {
+            const newMod = new Moderator({ userID, clubID });
+            await newMod.save();
+        }
+        
+
         const savedClub = await newClub.save();
-        res.status(201).json({ message: "Club created successfully", club: savedClub });
+        res.status(201).json({ message: "Club created successfully", club: savedClub, moderatorStatus: existingMod ? "Already a moderator" : "Added as moderator" });
     } catch (error) {
         console.error("Error creating club:", error);
         res.status(500).json({ error: "Internal server error" });

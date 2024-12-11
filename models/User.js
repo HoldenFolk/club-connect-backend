@@ -32,11 +32,11 @@ const UserSchema = new Schema(
             type: String,
             required: [true, "Password is required"],
         },
-        publicKey: {
-            type: String,
-            unique: true, // Ensures each user has a unique public key
-            required: [true, "Public key is required"],
-        },
+        // publicKey: {
+        //     type: String,
+        //     unique: true, // Ensures each user has a unique public key
+        //     required: [true, "Public key is required"],
+        // },
     },
     {
         timestamps: true, // Automatically adds `createdAt` and `updatedAt` fields

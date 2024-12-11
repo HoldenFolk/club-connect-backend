@@ -1,9 +1,11 @@
 const Event = require("../models/Event");
 const Club = require("../models/Club");
+const Moderator = require("../models/Moderator");
 
 // Create a new event
 const createEvent = async (req, res) => {
-    const {name, clubID, date, place, description } = req.body;
+    const { name, clubID, date, place, description } = req.body;
+    const userID = req.user.id; // Get the user ID from the authenticated user
 
     // Validate mandatory fields
     if (!name || !clubID || !date || !place || !description) {
@@ -12,23 +14,18 @@ const createEvent = async (req, res) => {
 
     try {
         // Check if the club exists
-        // const club = await Club.findById(clubID);
         const club = await Club.findOne({ clubID });
         if (!club) {
             return res.status(404).json({ error: "Club not found." });
         }
 
-        // Check if the event ID is unique
-        // const existingEvent = await Event.findOne({ eventID });
-        // if (existingEvent) {
-            // return res.status(400).json({ error: "An event with this ID already exists." });
-        // }
+        // Check if the event name is unique for this club
         const existingEvent = await Event.findOne({ name, clubID });
         if (existingEvent) {
             return res.status(400).json({ error: "An event with this name already exists for the specified club." });
         }
 
-        const eventCount = await Event.countDocuments(); // Counts all documents in the Users collection
+        const eventCount = await Event.countDocuments();
         const eventID = eventCount + 1;
 
         // Create the event
@@ -38,10 +35,22 @@ const createEvent = async (req, res) => {
             name,
             date,
             place,
-            description });
+            description
+        });
         const savedEvent = await newEvent.save();
 
-        res.status(201).json({ message: "Event created successfully", event: savedEvent });
+        // Add the current user as a moderator for this club
+        const existingMod = await Moderator.findOne({ userID, clubID });
+        if (!existingMod) {
+            const newMod = new Moderator({ userID, clubID });
+            await newMod.save();
+        }
+
+        res.status(201).json({
+            message: "Event created successfully",
+            event: savedEvent,
+            moderatorStatus: existingMod ? "Already a moderator" : "Added as moderator"
+        });
     } catch (error) {
         console.error("Error creating event:", error);
         res.status(500).json({ error: "Internal server error" });

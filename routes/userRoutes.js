@@ -10,6 +10,6 @@ router.post("/register", registerUser);
 // });
 
 // Get user by ID
-router.get("/:userID", getUserById);
+// router.get("/:userID", getUserById);
 
 module.exports = router;

@@ -22,11 +22,11 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Generate a public key for the user
-        const { publicKey } = crypto.generateKeyPairSync("rsa", {
-            modulusLength: 2048,
-            publicKeyEncoding: { type: "spki", format: "pem" },
-            privateKeyEncoding: { type: "pkcs8", format: "pem" },
-        });
+        // const { publicKey } = crypto.generateKeyPairSync("rsa", {
+        //     modulusLength: 2048,
+        //     publicKeyEncoding: { type: "spki", format: "pem" },
+        //     privateKeyEncoding: { type: "pkcs8", format: "pem" },
+        // });
 
         // Calculate the next userID
         const userCount = await Users.countDocuments(); // Counts all documents in the Users collection
@@ -38,7 +38,7 @@ const registerUser = async (req, res) => {
             email,
             username,
             password: hashedPassword,
-            publicKey, // Save the public key
+            // publicKey, // Save the public key
         });
 
         const savedUser = await newUser.save();
@@ -46,7 +46,7 @@ const registerUser = async (req, res) => {
 
         res.status(201).json({
             message: "User registered successfully",
-            publicKey,
+            // publicKey,
             userID,
         });
     } catch (error) {
@@ -55,26 +55,26 @@ const registerUser = async (req, res) => {
     }
 };
 
-// Get a user by their ID
-const getUserById = async (req, res) => {
-    const { userID } = req.params;
+// // Get a user by their ID
+// const getUserById = async (req, res) => {
+//     const { userID } = req.params;
 
-    try {
-        const user = await Users.findOne({ userID });
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
+//     try {
+//         const user = await Users.findOne({ userID });
+//         if (!user) {
+//             return res.status(404).json({ error: "User not found" });
+//         }
 
-        res.status(200).json({
-            id: user.userID,
-            email: user.email,
-            username: user.username,
-            publicKey: user.publicKey,
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-};
+//         res.status(200).json({
+//             id: user.userID,
+//             email: user.email,
+//             username: user.username,
+//             // publicKey: user.publicKey,
+//         });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ error: "Internal server error" });
+//     }
+// };
 
-module.exports = { registerUser, getUserById };
+module.exports = { registerUser}; //, getUserById };

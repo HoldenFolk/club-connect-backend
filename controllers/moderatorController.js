@@ -11,10 +11,8 @@ const createModerator =  async (req, res) => {
     if (!userID || !clubID) {
         return res.status(400).json({ error: "All fields are required." });
     }
-
     
     try {
-
         //user and club exists check
         const club = await Club.findOne({ clubID });
         if (!club) {
@@ -26,7 +24,7 @@ const createModerator =  async (req, res) => {
         }
 
         //(user, club) unique check
-        const existingMod = await Event.findOne({ userID, clubID });
+        const existingMod = await Moderator.findOne({ userID, clubID });
         if (existingMod) {
             return res.status(400).json({ error: "This user is already a moderator for this club." });
         }
@@ -44,3 +42,4 @@ const createModerator =  async (req, res) => {
     }
 }
  
+module.exports = { createModerator };

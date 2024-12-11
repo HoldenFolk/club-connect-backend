@@ -10,14 +10,16 @@ const clubSchema = new mongoose.Schema({
     },
     name: { type: String, required: true },
     description: { type: String, required: true },
+    followers: Number,
+    verified: { type: Boolean, required: false},
     banner: String,
     logo: String,
     category: String,
     website: String,
-    email: String,
-    moderators: [{ type: Number, ref: "User" }], // Array of user IDs
-    members: [{ type: Number, ref: "User" }],   // Optional: List of members
-    createdBy: { type: Number, ref: "User" }, // Creator
+    email: String
+    // moderators: [{ type: Number, ref: "User" }], // Array of user IDs
+    // members: [{ type: Number, ref: "User" }],   // Optional: List of members
+    // createdBy: { type: Number, ref: "User" }, // Creator
 },
     {
         timestamps: true,

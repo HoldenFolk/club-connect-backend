@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const User = require("../models/User");
-require("dotenv").config(); // Ensure dotenv is loaded
+require("dotenv").config();
 
 const authMiddleware = async (req, res, next) => {
     console.log("Auth Middleware: Starting...");
@@ -21,17 +22,17 @@ const authMiddleware = async (req, res, next) => {
     }
 
     try {
-        // Load the JWT secret
-        const secret = process.env.PRIVATE_KEY;
-        console.log("JWT Secret Loaded:", secret ? "Yes" : "No");
+        // Load the server private key
+        const serverPrivateKey = process.env.PRIVATE_KEY;
+        console.log("Server Private Key Loaded:", serverPrivateKey ? "Yes" : "No");
 
-        if (!secret) {
-            throw new Error("JWT_SECRET is not set in environment variables");
+        if (!serverPrivateKey) {
+            throw new Error("PRIVATE_KEY is not set in environment variables");
         }
 
-        // Verify the token
+        // Verify the token with server private key
         console.log("Verifying token...");
-        const decoded = jwt.verify(token, secret);
+        const decoded = jwt.verify(token, serverPrivateKey);
         console.log("Token Decoded:", decoded);
 
         // Find the user in the database
@@ -42,10 +43,19 @@ const authMiddleware = async (req, res, next) => {
             return res.status(401).json({ error: "Unauthorized: User not found" });
         }
 
+        // Additional verification using user's public key
+        // if (decoded.publicKey && decoded.publicKey !== user.publicKey) {
+        //     console.log("Public Key Mismatch");
+        //     return res.status(401).json({ error: "Unauthorized: Public key verification failed" });
+        // }
+
         console.log("User Found:", user);
 
         // Attach user info to the request object
-        req.user = { id: user._id, username: user.username };
+        req.user = {
+            userID: user.userID,
+            username: user.username,
+        };
         console.log("User attached to request:", req.user);
 
         next(); // Pass control to the next middleware/handler
