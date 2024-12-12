@@ -39,9 +39,11 @@ const createPost = async (req, res) => {
         }
         */
 
+        //duplicate key mistake??? 
+
         //for creating 
-        userID = 1; 
-        clubID = 10; 
+        userID = 2; 
+        clubID = 2; 
         title = "Example Post 2."; 
         text = "Hi"; 
 
@@ -90,10 +92,8 @@ const getClubPosts = async (req, res) => {
         } 
         const cID = club.clubID;  
         
-        //get n posts 
-        const posts = await Post.find({ clubID: cID}, {limit: postCount}); 
-        posts.sort({date: -1}); //sort by date, most recent first. 
-        console.log(posts); 
+        //get n posts. sorted by date, most recent first 
+        const posts = await Post.find({ clubID: cID}).limit(postCount).sort({date: -1});  
 
         res.status(201).json({ posts });
 
@@ -132,8 +132,7 @@ const getDashboardPosts = async (req, res) => {
         }
 
         //get posts from all clubs followed, sorted by date. limit to postCount 
-        let posts = await Post.find({ $or: conditions}).sort({date: -1}).limit(postCount);
-        console.log(posts);   
+        let posts = await Post.find({ $or: conditions}).sort({date: -1}).limit(postCount);  
 
         //return posts for this usr dashboard 
         res.status(201).json({ posts });
