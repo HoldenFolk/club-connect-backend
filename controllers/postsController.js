@@ -2,6 +2,7 @@ const Club = require("../models/Club");
 const Post = require("../models/Post");
 const User = require("../models/User");
 const Moderator = require("../models/Moderator");
+const ClubsFollowed = require("../models/ClubsFollowed");
 
 //Posts(userID, postId, clubId, title, text, imageURL, date) 
 
@@ -91,7 +92,7 @@ const getClubPosts = async (req, res) => {
         
         //get n posts 
         const posts = await Post.find({ clubID: cID}, {limit: postCount}); 
-        posts.sort('date'); //sort by date
+        posts.sort({date: -1}); //sort by date, most recent first. 
         console.log(posts); 
 
         res.status(201).json({ posts });
@@ -105,8 +106,42 @@ const getClubPosts = async (req, res) => {
 
 //get all posts for a user (dashboard) 
 const getDashboardPosts = async (req, res) => {
-    //get all clubs followed 
-    //for each one, get all posts 
+
+    const { userID, postCount } = req.params;
+    
+    // Validate mandatory fields
+    if (!userID || !postCount) {
+        return res.status(400).json({ error: "Required fields missing" });
+    }
+
+    try {
+        const usr = await User.findOne({userID}); 
+        if (!usr) {
+            return res.status(404).json({ error: "User not found." });
+        }
+
+        //get clubs followed by this user
+        var clubsFollowed = await ClubsFollowed.findOne({userID}); 
+        clubsFollowed = clubsFollowed.clubIDs 
+         
+        //condition array 
+        let conditions = [];  
+        for (let club of clubsFollowed) { 
+            let condition = {clubID : club};
+            conditions.push(condition);  
+        }
+
+        //get posts from all clubs followed, sorted by date. limit to postCount 
+        let posts = await Post.find({ $or: conditions}).sort({date: -1}).limit(postCount);
+        console.log(posts);   
+
+        //return posts for this usr dashboard 
+        res.status(201).json({ posts });
+
+    } catch (error) {
+        console.error("Error getting club posts:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 }; 
 
 

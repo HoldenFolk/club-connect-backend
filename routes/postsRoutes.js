@@ -10,13 +10,12 @@ router.post("/create", createPost);
 
 // Get x posts for a specific club, sorted by date -> implement dynamic number of posts 
 // router.get("/:clubID", authenticate, getClubPosts);
-router.get("/:clubName/:postCount", getClubPosts);
+router.get("/clubfeed/:clubName/:postCount", getClubPosts);
 
 
 // Get all posts for a user dashboard, sorted by date
 // router.get("/:clubID", authenticate, getDashboardPosts);
-
-router.get("/:clubID/:userID", getDashboardPosts);
+router.get("/dashboard/:userID/:postCount", getDashboardPosts);
 
 
 module.exports = router;
