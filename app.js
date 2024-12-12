@@ -7,6 +7,8 @@ const clubRoutes = require("./routes/clubRoutes");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes"); 
 const eventRoutes = require("./routes/eventRoutes"); 
+const modRoutes = require("./routes/modRoutes");
+const postsRoutes = require("./routes/postsRoutes");
 
 // Middleware
 app.use(cors());
@@ -24,6 +26,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/clubs", clubRoutes);
 app.use("/api/events", eventRoutes);
+app.use("/api/mod", modRoutes); 
+app.use("/api/posts", postsRoutes); 
 
 // Error handling
 app.use((err, req, res, next) => {

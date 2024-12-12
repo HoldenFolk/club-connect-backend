@@ -14,7 +14,7 @@ const createModerator =  async (req, res) => {
 
     
     try {
-
+        
         //user and club exists check
         const club = await Club.findOne({ clubID });
         if (!club) {
@@ -26,13 +26,13 @@ const createModerator =  async (req, res) => {
         }
 
         //(user, club) unique check
-        const existingMod = await Event.findOne({ userID, clubID });
+        const existingMod = await Moderator.findOne({ userID, clubID });
         if (existingMod) {
             return res.status(400).json({ error: "This user is already a moderator for this club." });
         }
 
         //add to Moderators 
-        const newMod = new Moderator({userID,clubID,});
+        const newMod = new Moderator({userID,clubID});
         const savedMod = await newMod.save();
 
         res.status(201).json({ message: "Moderator created successfully", moderator: savedMod });
@@ -42,5 +42,7 @@ const createModerator =  async (req, res) => {
         console.error("Error creating moderator:", error);
         res.status(500).json({ error: "Internal server error" });
     }
-}
+}; 
+
+module.exports = { createModerator };
  
