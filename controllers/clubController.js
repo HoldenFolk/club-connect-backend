@@ -91,4 +91,36 @@ const getClubById = async (req, res) => {
     }
 };
 
-module.exports = {createClub,getClubById};
+// Get a club by their name
+const getClubByName = async (req, res) => {
+    const { name } = req.params;
+    console.log('Name:', name);
+
+    try {
+        // Find the club by name (case-insensitive)
+        const club = await Club.findOne({ name: { $regex: new RegExp(`^${name}$`, "i") } });
+
+        if (!club) {
+            return res.status(404).json({ error: "Club not found" });
+        }
+
+        // Destructure fields from the club document
+        const { clubID, description, category, banner, logo, website, email } = club;
+
+        res.status(200).json({
+            clubID,
+            name: club.name,
+            description,
+            category,
+            banner,
+            logo,
+            website,
+            email,
+        });
+    } catch (error) {
+        console.error("Error fetching club by name:", error.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+module.exports = { createClub, getClubById, getClubByName };
