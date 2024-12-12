@@ -17,7 +17,10 @@ const createPost = async (req, res) => {
     if (!userID || !clubID || !title || !text) {
         return res.status(400).json({ error: "Required fields missing" });
     }
+
+    console.log(req.body); 
     */
+    
     
     try {
 
@@ -42,9 +45,9 @@ const createPost = async (req, res) => {
         //duplicate key mistake??? 
 
         //for creating 
-        userID = 2; 
-        clubID = 2; 
-        title = "Example Post 2."; 
+        userID = 1; 
+        clubID = 4; 
+        title = "Example Post."; 
         text = "Hi"; 
 
         //create new post 
