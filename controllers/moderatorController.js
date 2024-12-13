@@ -42,6 +42,4 @@ const createModerator =  async (req, res) => {
     }
 }; 
 
-module.exports = { createModerator };
- 
-module.exports = { createModerator };
+module.exports = { createModerator }; 

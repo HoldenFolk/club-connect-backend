@@ -139,8 +139,7 @@ const searchClub = async (req, res) => {
 
     try {
         //match club name with substring, case insensitive
-        const clubs = await Club.find({name : {$regex : regex, $options: 'i'}}, {clubID: 1, name: 1}); 
-        console.log(clubs); 
+        const clubs = await Club.find({name : {$regex : regex, $options: 'i'}}, {clubID: 1, name: 1});  
         
         //if empty, return no such club message 
         if (!clubs || (clubs.length == 0)) {
