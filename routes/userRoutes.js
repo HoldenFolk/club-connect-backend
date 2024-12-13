@@ -1,5 +1,5 @@
 const express = require("express");
-const { registerUser, getUserById, updateUserById } = require("../controllers/userController");
+const { registerUser, getUserById, updateUserById, deleteUser } = require("../controllers/userController");
 
 const router = express.Router();
 
@@ -11,5 +11,9 @@ router.get("/:userID", getUserById);
 
 // Update user by ID
 router.put("/:userID", updateUserById);
+
+//Delete this user, should be authenticated 
+//router.delete("/delete/:userID", authMiddleware, deleteUser); 
+router.delete("/delete/:userID", deleteUser); 
 
 module.exports = router;

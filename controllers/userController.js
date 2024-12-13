@@ -1,11 +1,14 @@
 const bcrypt = require("bcryptjs");
 const Users = require("../models/User");
+const ClubsFollowed = require("../models/ClubsFollowed");
+const Clubs = require("../models/Club"); 
 const crypto = require("crypto");
+const Moderator = require("../models/Moderator");
 
 
 // Register a new user
 const registerUser = async (req, res) => {
-    const { email, username, password } = req.body;
+    const { email, username, password } = req.body;  
 
     if (!email || !username || !password) {
         return res.status(400).json({ error: "Missing required fields" });
@@ -122,4 +125,34 @@ const updateUserById = async (req, res) => {
     }
 };
 
-module.exports = { registerUser, getUserById, updateUserById };
+//deleting a user 
+const deleteUser = async (req, res) => {
+    const { userID } = req.params; 
+
+    try {
+        //delete from users
+        const deletedUser = await Users.findOneAndDelete({userID : userID}); 
+        console.log(deleteUser); 
+
+        //delete from clubs followed 
+        const prevFollowed = await ClubsFollowed.findOneAndDelete({ userID: userID}); 
+        console.log(prevFollowed); 
+        //remove following 
+        for (let clubID of prevFollowed.clubIDs) {
+            let club = Clubs.findOne({clubID: clubID}); 
+            club.followers = club.followers -1; 
+            await club.save();  //does not work
+        }
+
+        //delete from moderators 
+        const deletedMod = await Moderator.deleteMany({userID: userID}); 
+        console.log(deletedMod); 
+
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+    
+}
+
+module.exports = { registerUser, getUserById, updateUserById, deleteUser };
