@@ -77,6 +77,7 @@ const getUserById = async (req, res) => {
     }
 };
 
+
 // Update a user by their ID
 const updateUserById = async (req, res) => {
     const { userID } = req.params;
