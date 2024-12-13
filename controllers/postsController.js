@@ -9,22 +9,16 @@ const ClubsFollowed = require("../models/ClubsFollowed");
 //user creates post for a club 
 const createPost = async (req, res) => {
     
-    
     var {userID, clubID, title, text, imageURL} = req.body;
+    console.log(req.body);
 
-    /*
     // Validate mandatory fields
     if (!userID || !clubID || !title || !text) {
         return res.status(400).json({ error: "Required fields missing" });
-    }
+    } 
 
-    console.log(req.body); 
-    */
-    
-    
     try {
 
-        /*
         //user and club exists check
         const club = await Club.findOne({ clubID });
         if (!club) {
@@ -40,16 +34,7 @@ const createPost = async (req, res) => {
         if (!existingMod) {
             return res.status(400).json({ error: "This user is not a moderator for this club." });
         }
-        */
-
-        //duplicate key mistake??? 
-
-        //for creating 
-        userID = 1; 
-        clubID = 4; 
-        title = "Example Post."; 
-        text = "Hi"; 
-
+        
         //create new post 
         const postCount = await Post.countDocuments(); 
         const postID = postCount + 1;
@@ -146,5 +131,59 @@ const getDashboardPosts = async (req, res) => {
     }
 }; 
 
+//deleting a post (by post id) 
+const deletePost = async (req, res) => {
+     
+    const { postID, userID } = req.params; 
 
-module.exports = {createPost, getClubPosts, getDashboardPosts};
+    // Validate mandatoriy fields
+    if (!userID || !postID) {
+        return res.status(400).json({ error: "Required fields missing" });
+    }
+    
+    try {
+        //get club associated with this post 
+        const p = await Post.findOne({postID: postID}); 
+        if (!p) {
+            return res.status(404).json({ error: "Post does not exist."});
+        }
+        let club = p.clubID;  
+
+        //check if user is a moderator
+        const mod = await Moderator.findOne({userID: userID, clubID: club}); 
+        if (!mod) {
+            return res.status(404).json({ error: "User is not a moderator." });
+        }
+
+        const deletedPost = await Post.findOneAndDelete({ postID: postID });
+        if (!deletedPost) {
+            return res.status(404).json({ error: "Post could not be deleted. " });
+        }
+
+        res.status(201).json({ message : "Post was sucessfully deleted. ", post: deletedPost});
+
+    } catch (error) {
+        console.error("Error getting club posts:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}; 
+
+//pin a post (by post id)
+const pinPost = async (req, res) => {
+    //moderator check 
+    //set pinned flag
+}
+
+//remove pin (by post id)
+const removePin = async (req, res) => {
+    //mod check 
+    //get post and check if was pinned 
+    //update db 
+}
+
+//get pinned posts (by club name)
+const getPinnedPosts = async (req, res) => {
+    //get Club posts but with pinned flag 
+}
+
+module.exports = {createPost, getClubPosts, getDashboardPosts, deletePost};

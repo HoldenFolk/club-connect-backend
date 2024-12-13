@@ -2,7 +2,7 @@ const Club = require("../models/Club");
 const Moderator = require("../models/Moderator");
 const User = require("../models/User"); 
 
-//createModerator
+//createModerator, adds moderator to this club
 const createModerator =  async (req, res) => {
 
     const {userID, clubID} = req.body;
