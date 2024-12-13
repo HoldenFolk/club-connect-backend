@@ -123,15 +123,69 @@ const getClubByName = async (req, res) => {
     }
 };
 
+//edit club information 
+const editClub = async (req, res) => {
+    
+    /* With auth 
+    const { name, description, category, banner, logo, website, email, verified } = req.body;
+    const userID = req.user.userID; // Assuming `req.user` is populated by an authentication middleware
+    */
+    var { clubID, userID, name, description, banner, logo, website, email } = req.body;
 
-//by clubID 
-//or set a deleted flag? 
-const deleteClub = async (req, res) => {
-    //check if user is mod 
-    //delete from Club 
-    //delete from Moderators 
-    //delete from clubsFollowed? 
-}
+    //for testing 
+    userID = 1; clubID = 10; description="updated description"; 
+    
+    try {
+        //mod check
+        const mod = await Moderator.findOne({userID : userID, clubID : clubID}); 
+        console.log(mod); 
+        if (!mod) {
+            return res.status(400).json({ error: "This user is not a moderator for this club." });
+        } 
+        //get club
+        const club = await Club.findOne({clubID}); 
+        if (!club) {
+            return res.status(400).json({ error: "Club you are trying to update does not exist." });
+        }
+        console.log(club);
+
+        //update only non-null input fields 
+        if (name) {
+            club.name = name; 
+        }
+        if (description) {
+            club.description = description; 
+            console.log(club.description); 
+        }
+        if (category) {
+            club.category = category; 
+        }
+        if (banner) { 
+            club.banner = banner; 
+        }
+        if (logo) {
+            club.logo = logo; 
+        }
+        if (website) {
+            club.website = website; 
+        }
+        if (email) {
+            club.email = email; 
+        }
+        if (verified) {
+            club.verified = verified; 
+        }
+
+        //save changes to DB 
+        const savedClub = await club.save();
+        console.log(savedClub); 
+        res.status(200).json({message: "Club updated successfully.", updatedClub: savedClub}); 
+
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error"});
+    }
+
+}; 
 
 //input : substring 
 const searchClub = async (req, res) => {
@@ -149,10 +203,9 @@ const searchClub = async (req, res) => {
         res.status(200).json({clubs}); 
 
     } catch (error) {
-        console.error("Error fetching club by ID:", error.message);
         res.status(500).json({ error: "Internal server error" });
     }
 
 }; 
 
-module.exports = { createClub, getClubById, getClubByName, searchClub };
+module.exports = { createClub, getClubById, getClubByName, searchClub, editClub };
