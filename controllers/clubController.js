@@ -37,6 +37,7 @@ const createClub = async (req, res) => {
             website: website || null,
             email: email || null,
             verified: verified || false,
+            followers: 0, 
             // moderators: [userId] || null, // Add the creator as the first moderator
             // createdBy: userId || null,
         });
@@ -205,7 +206,16 @@ const searchClub = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: "Internal server error" });
     }
-
 }; 
 
-module.exports = { createClub, getClubById, getClubByName, searchClub, editClub };
+//return all clubs, ordered by decreasing number of followers 
+const getDirectory = async (req, res) => {
+    try {
+        let dir = await Club.find({}, {clubID: 1, name: 1, logo: 1}).sort({followers: -1}); 
+        res.status(201).json({ dir }); 
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+}; 
+
+module.exports = { createClub, getClubById, getClubByName, searchClub, editClub, getDirectory };

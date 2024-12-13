@@ -47,6 +47,10 @@ const addClub = async (req, res) => {
         // Save the document
         const savedClubsFollowed = await clubsFollowed.save();
 
+        //increase follower count for club
+        club.followers = club.followers + 1;  
+        const savedClub = await club.save(); 
+
         res.status(201).json({
             message: "Club followed successfully",
             clubsFollowed: savedClubsFollowed
@@ -96,6 +100,10 @@ const removeClub = async (req, res) => {
 
         // Save the document
         const savedClubsFollowed = await clubsFollowed.save();
+
+        //decrease follower count 
+        club.followers = club.followers - 1;  
+        const savedClub = await club.save(); 
 
         res.status(201).json({
             message: "Club unfollowed successfully",

@@ -1,5 +1,5 @@
 const express = require("express");
-const { createClub, getClubById, getClubByName, searchClub, editClub } = require("../controllers/clubController");
+const { createClub, getClubById, getClubByName, searchClub, editClub, getDirectory } = require("../controllers/clubController");
 const authMiddleware = require("../middlewares/authenticate")
 
 const router = express.Router();
@@ -19,5 +19,8 @@ router.get("/search/:regex", searchClub);
 // Route for editing club info (requires authentication)
 //router.post("/edit", authMiddleware, editClub);
 router.get("/edit", editClub); 
+
+//not private
+router.get("/dir", getDirectory); 
 
 module.exports = router;
