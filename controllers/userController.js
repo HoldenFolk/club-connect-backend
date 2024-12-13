@@ -77,4 +77,5 @@ const getUserById = async (req, res) => {
     }
 };
 
+
 module.exports = { registerUser, getUserById };

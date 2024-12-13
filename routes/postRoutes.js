@@ -17,8 +17,7 @@ router.get("/:clubID", getClubPosts);
 
 router.get("/:clubID/:userID", getDashboardPosts);
 
-//delete post
-router.delete("/delete/:postID/:userID", deletePost); 
+ 
 
 
 module.exports = router;
