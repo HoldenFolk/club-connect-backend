@@ -9,7 +9,6 @@ const authRoutes = require("./routes/authRoutes");
 const eventRoutes = require("./routes/eventRoutes"); 
 const modRoutes = require("./routes/modRoutes")
 const clubsFollowedRoutes = require("./routes/clubsFollowedRoutes")
-const modRoutes = require("./routes/modRoutes");
 const postsRoutes = require("./routes/postsRoutes");
 
 // Middleware

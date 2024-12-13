@@ -25,7 +25,6 @@ const createModerator =  async (req, res) => {
 
         //(user, club) unique check
         const existingMod = await Moderator.findOne({ userID, clubID });
-        const existingMod = await Moderator.findOne({ userID, clubID });
         if (existingMod) {
             return res.status(400).json({ error: "This user is already a moderator for this club." });
         }
