@@ -123,4 +123,37 @@ const getClubByName = async (req, res) => {
     }
 };
 
-module.exports = { createClub, getClubById, getClubByName };
+
+//by clubID 
+//or set a deleted flag? 
+const deleteClub = async (req, res) => {
+    //check if user is mod 
+    //delete from Club 
+    //delete from Moderators 
+    //delete from clubsFollowed? 
+}
+
+//input : substring 
+const searchClub = async (req, res) => {
+    const { regex } = req.params;  
+
+    try {
+        //match club name with substring, case insensitive
+        const clubs = await Club.find({name : {$regex : regex, $options: 'i'}}, {clubID: 1, name: 1}); 
+        console.log(clubs); 
+        
+        //if empty, return no such club message 
+        if (!clubs || (clubs.length == 0)) {
+            return res.status(200).json({message: "No such club. "});
+        }
+
+        res.status(200).json({clubs}); 
+
+    } catch (error) {
+        console.error("Error fetching club by ID:", error.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
+
+}; 
+
+module.exports = { createClub, getClubById, getClubByName, searchClub };
