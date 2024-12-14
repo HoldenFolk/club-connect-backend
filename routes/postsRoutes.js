@@ -5,8 +5,7 @@ const authenticate = require("../middlewares/authenticate"); // Middleware to en
 const router = express.Router();
 
 // Create a new post (requires authentication)
-// router.post("/", authenticate, createPost);
-router.post("/create", createPost);
+router.post("/create", authenticate, createPost);
 
 // Get x posts for a specific club, sorted by date -> implement dynamic number of posts 
 router.get("/clubfeed/:clubName/:postCount", authenticate, getClubPosts);
