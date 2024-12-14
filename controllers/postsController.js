@@ -9,8 +9,8 @@ const ClubsFollowed = require("../models/ClubsFollowed");
 //user creates post for a club 
 const createPost = async (req, res) => {
     
-    var {userID, clubID, title, text, imageURL} = req.body;
-    console.log(req.body);
+    const {clubID, title, text, imageURL} = req.body;
+    const userID = req.user.userID; 
 
     // Validate mandatory fields
     if (!userID || !clubID || !title || !text) {
