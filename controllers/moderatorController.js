@@ -5,7 +5,7 @@ const User = require("../models/User");
 //createModerator, adds moderator to this club
 const createModerator =  async (req, res) => {
 
-    const {userID, clubID} = req.body;
+    const {userID, clubID} = req.body; 
 
     // Validate mandatory fields
     if (!userID || !clubID) {

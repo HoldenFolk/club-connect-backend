@@ -140,7 +140,8 @@ const getDashboardPosts = async (req, res) => {
 //deleting a post (by post id) 
 const deletePost = async (req, res) => {
      
-    const { postID, userID } = req.params; 
+    const { postID } = req.params; 
+    const userID = req.user.userID;
 
     // Validate mandatoriy fields
     if (!userID || !postID) {
