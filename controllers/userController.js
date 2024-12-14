@@ -4,6 +4,7 @@ const ClubsFollowed = require("../models/ClubsFollowed");
 const Clubs = require("../models/Club"); 
 const crypto = require("crypto");
 const Moderator = require("../models/Moderator");
+const Posts = require("../models/Post");
 
 
 // Register a new user
@@ -132,21 +133,34 @@ const deleteUser = async (req, res) => {
     try {
         //delete from users
         const deletedUser = await Users.findOneAndDelete({userID : userID}); 
+        //const deletedUser = await Users.findOne({userID : userID}); 
         console.log(deleteUser); 
 
         //delete from clubs followed 
         const prevFollowed = await ClubsFollowed.findOneAndDelete({ userID: userID}); 
+        //const prevFollowed = await ClubsFollowed.findOne({ userID: userID});
         console.log(prevFollowed); 
         //remove following 
         for (let clubID of prevFollowed.clubIDs) {
-            let club = Clubs.findOne({clubID: clubID}); 
-            club.followers = club.followers -1; 
-            await club.save();  //does not work
+            let club = await Clubs.findOne({clubID: clubID}); 
+            club.followers = club.followers -1;
+            console.log(club);  
+            await club.save();  
         }
 
         //delete from moderators 
         const deletedMod = await Moderator.deleteMany({userID: userID}); 
-        console.log(deletedMod); 
+        console.log(deletedMod);
+
+        //set userID = 0 on posts made by that user, like a deleted flag 
+        //not deleting the post
+        const posts = await Posts.find({userID: userID}); 
+        for (let post of posts) {
+            post.userID = 0; 
+            await post.save(); 
+        }
+
+        res.status(200).json({message: "User deleted successfully.", user: deletedUser});  
 
     } catch (error) {
         console.error("Error updating user:", error);
