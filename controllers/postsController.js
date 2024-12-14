@@ -95,7 +95,9 @@ const getClubPosts = async (req, res) => {
 //get all posts for a user (dashboard) 
 const getDashboardPosts = async (req, res) => {
 
-    const { userID, postCount } = req.params;
+    //with authentication
+    const { postCount } = req.params;
+    const userID = req.user.userID; // Assuming `req.user` is populated by an authentication middleware
     
     // Validate mandatory fields
     if (!userID || !postCount) {
@@ -110,6 +112,10 @@ const getDashboardPosts = async (req, res) => {
 
         //get clubs followed by this user
         var clubsFollowed = await ClubsFollowed.findOne({userID}); 
+        //user does not follow any club 
+        if (!clubsFollowed) {
+            return res.status(201).json({message: "User does not follow any clubs.", posts: {}}); 
+        }
         clubsFollowed = clubsFollowed.clubIDs 
          
         //condition array 
@@ -123,7 +129,7 @@ const getDashboardPosts = async (req, res) => {
         let posts = await Post.find({ $or: conditions}).sort({date: -1}).limit(postCount);  
 
         //return posts for this usr dashboard 
-        res.status(201).json({ posts });
+        res.status(201).json({ message: "Posts for this dashboard.", posts: posts });
 
     } catch (error) {
         console.error("Error getting club posts:", error);

@@ -14,8 +14,7 @@ router.get("/clubfeed/:clubName/:postCount", getClubPosts);
 
 
 // Get all posts for a user dashboard, sorted by date
-// router.get("/:clubID", authenticate, getDashboardPosts);
-router.get("/dashboard/:userID/:postCount", getDashboardPosts);
+router.get("/dashboard/:postCount", authenticate, getDashboardPosts);
 
 //delete post
 router.delete("/delete/:postID/:userID", deletePost);

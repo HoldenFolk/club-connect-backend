@@ -132,9 +132,6 @@ const editClub = async (req, res) => {
     const userID = req.user.userID; // Assuming `req.user` is populated by an authentication middleware
     */
     var { clubID, userID, name, description, banner, logo, website, email } = req.body;
-
-    //for testing 
-    userID = 1; clubID = 15; description="updated description"; 
     
     try {
         //mod check
