@@ -8,7 +8,7 @@ const authMiddleware = async (req, res, next) => {
 
     // Check for token in headers
     const authHeader = req.headers.authorization;
-    console.log("Auth Header:", authHeader);
+    console.log("Auth Header:", authHeader)
 
     if (!authHeader) {
         return res.status(401).json({ error: "Authorization header missing" });
@@ -32,6 +32,7 @@ const authMiddleware = async (req, res, next) => {
 
         // Verify the token with server private key
         console.log("Verifying token...");
+        console.log('Token: ', token);
         const decoded = jwt.verify(token, serverPrivateKey);
         console.log("Token Decoded:", decoded);
 
