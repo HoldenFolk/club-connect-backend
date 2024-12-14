@@ -4,9 +4,7 @@ const authMiddleware = require("../middlewares/authenticate"); // Middleware to 
 
 const router = express.Router();
 
-// Create a new event (requires authentication)
-// router.post("/", authenticate, createEvent);
-// router.post("/create", createModerator);
+// Create a new moderator (requires authentication)
 router.post("/create", authMiddleware, createModerator);
 
 module.exports = router;

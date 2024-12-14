@@ -15,8 +15,7 @@ router.get("/clubfeed/:clubName/:postCount", authenticate, getClubPosts);
 router.get("/dashboard/:postCount", authenticate, getDashboardPosts);
 
 //delete post
-//AUTHENTICATE
-router.delete("/delete/:postID/:userID", deletePost);
+router.delete("/delete/:postID", authenticate, deletePost);
 
 
 module.exports = router;
