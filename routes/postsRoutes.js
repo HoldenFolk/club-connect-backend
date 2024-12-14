@@ -9,7 +9,7 @@ const router = express.Router();
 router.post("/create", createPost);
 
 // Get x posts for a specific club, sorted by date -> implement dynamic number of posts 
-router.get("/clubfeed/:clubName/:postCount", authenticate, getClubPosts);
+router.get("/clubfeed/:clubName/:postCount", getClubPosts);
 
 // Get all posts for a user dashboard, sorted by date
 router.get("/dashboard/:postCount", authenticate, getDashboardPosts);
