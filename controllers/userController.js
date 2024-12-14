@@ -135,7 +135,7 @@ const deleteUser = async (req, res) => {
         
         //delete from users
         const deletedUser = await Users.findOneAndDelete({userID : userID});  
-        console.log(deleteUser); 
+        console.log(deletedUser); 
 
         //delete from clubs followed 
         const prevFollowed = await ClubsFollowed.findOneAndDelete({ userID: userID}); 
