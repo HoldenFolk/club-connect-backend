@@ -18,7 +18,7 @@ router.get("/search/:regex", searchClub);
 
 // Route for editing club info (requires authentication)
 //router.post("/edit", authMiddleware, editClub);
-router.get("/edit", editClub); 
+router.post("/edit", editClub); 
 
 //not private
 router.get("/dir", getDirectory); 

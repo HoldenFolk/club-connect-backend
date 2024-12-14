@@ -134,12 +134,11 @@ const editClub = async (req, res) => {
     var { clubID, userID, name, description, banner, logo, website, email } = req.body;
 
     //for testing 
-    userID = 1; clubID = 10; description="updated description"; 
+    userID = 1; clubID = 15; description="updated description"; 
     
     try {
         //mod check
-        const mod = await Moderator.findOne({userID : userID, clubID : clubID}); 
-        console.log(mod); 
+        const mod = await Moderator.findOne({userID : userID, clubID : clubID});  
         if (!mod) {
             return res.status(400).json({ error: "This user is not a moderator for this club." });
         } 
@@ -148,7 +147,6 @@ const editClub = async (req, res) => {
         if (!club) {
             return res.status(400).json({ error: "Club you are trying to update does not exist." });
         }
-        console.log(club);
 
         //update only non-null input fields 
         if (name) {
@@ -156,7 +154,6 @@ const editClub = async (req, res) => {
         }
         if (description) {
             club.description = description; 
-            console.log(club.description); 
         }
         if (category) {
             club.category = category; 
@@ -177,10 +174,14 @@ const editClub = async (req, res) => {
             club.verified = verified; 
         }
 
+        console.log("Attributes updated."); 
+
         //save changes to DB 
-        const savedClub = await club.save();
-        console.log(savedClub); 
-        res.status(200).json({message: "Club updated successfully.", updatedClub: savedClub}); 
+        await club.save();
+        
+        console.log(club); 
+
+        res.status(200).json({message: "Club updated successfully.", updatedClub: club}); 
 
     } catch (error) {
         res.status(500).json({ error: "Internal server error"});
