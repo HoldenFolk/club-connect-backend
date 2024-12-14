@@ -128,24 +128,29 @@ const updateUserById = async (req, res) => {
 
 //deleting a user 
 const deleteUser = async (req, res) => {
-    const { userID } = req.params; 
+    
+    const userID = req.user.userID;  
 
     try {
+        
         //delete from users
-        const deletedUser = await Users.findOneAndDelete({userID : userID}); 
-        //const deletedUser = await Users.findOne({userID : userID}); 
+        const deletedUser = await Users.findOneAndDelete({userID : userID});  
         console.log(deleteUser); 
 
         //delete from clubs followed 
         const prevFollowed = await ClubsFollowed.findOneAndDelete({ userID: userID}); 
-        //const prevFollowed = await ClubsFollowed.findOne({ userID: userID});
         console.log(prevFollowed); 
-        //remove following 
-        for (let clubID of prevFollowed.clubIDs) {
-            let club = await Clubs.findOne({clubID: clubID}); 
-            club.followers = club.followers -1;
-            console.log(club);  
-            await club.save();  
+
+        //remove following from clubs 
+        if (prevFollowed) {
+            for (let clubID of prevFollowed.clubIDs) {
+                let club = await Clubs.findOne({clubID: clubID}); 
+                if (club) {
+                    club.followers = club.followers -1;
+                    console.log(club);  
+                    await club.save();  
+                }
+            }
         }
 
         //delete from moderators 
@@ -155,9 +160,11 @@ const deleteUser = async (req, res) => {
         //set userID = 0 on posts made by that user, like a deleted flag 
         //not deleting the post
         const posts = await Posts.find({userID: userID}); 
-        for (let post of posts) {
-            post.userID = 0; 
-            await post.save(); 
+        if (posts.length > 0) {
+            for (let post of posts) {
+                post.userID = 0; 
+                await post.save(); 
+            }
         }
 
         res.status(200).json({message: "User deleted successfully.", user: deletedUser});  

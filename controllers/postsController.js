@@ -175,22 +175,4 @@ const deletePost = async (req, res) => {
     }
 }; 
 
-//pin a post (by post id)
-const pinPost = async (req, res) => {
-    //moderator check 
-    //set pinned flag
-}
-
-//remove pin (by post id)
-const removePin = async (req, res) => {
-    //mod check 
-    //get post and check if was pinned 
-    //update db 
-}
-
-//get pinned posts (by club name)
-const getPinnedPosts = async (req, res) => {
-    //get Club posts but with pinned flag 
-}
-
 module.exports = {createPost, getClubPosts, getDashboardPosts, deletePost};
