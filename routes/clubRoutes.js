@@ -5,10 +5,10 @@ const authMiddleware = require("../middlewares/authenticate")
 const router = express.Router();
 
 // Route for creating a club (requires authentication)
-router.post("/create", authMiddleware, createClub);
+router.post("/create", createClub);
 
 // Route for getting club by ID
-router.post("/:clubID", authMiddleware, getClubById);
+router.get("/:clubID", getClubById);
 
 //Route for getting club by name
 router.get("/name/:name", getClubByName);
@@ -17,8 +17,7 @@ router.get("/name/:name", getClubByName);
 router.get("/search/:regex", searchClub);
 
 // Route for editing club info (requires authentication)
-//router.post("/edit", authMiddleware, editClub);
-router.post("/edit", editClub); 
+router.post("/edit", authMiddleware,  editClub); 
 
 //not private
 router.get("/dir", getDirectory); 

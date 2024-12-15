@@ -1,6 +1,7 @@
 const ClubsFollowed = require("../models/ClubsFollowed");
 const Club = require("../models/Club");
 const User = require("../models/User");
+const req = require("express/lib/request");
 
 // Create a new follow
 const addClub = async (req, res) => {
@@ -139,4 +140,41 @@ const getFollowedClubs = async (req, res) => {
     }
 };
 
-module.exports = { addClub, getFollowedClubs, removeClub };
+const isFollowing = async (req, res) => {
+    const userID = req.user.userID;
+    const { clubID } = req.body;
+
+    // Validate mandatory fields
+    if (!clubID) {
+        return res.status(400).json({ error: "Club ID is required." });
+    }
+
+    try {
+        // Verify the user exists
+        const user = await User.findOne({ userID });
+        if (!user) {
+            return res.status(404).json({ error: "User not found." });
+        }
+
+        // Check if the user has a ClubsFollowed document
+        const clubsFollowed = await ClubsFollowed.findOne({ userID });
+
+        if (!clubsFollowed || !clubsFollowed.clubIDs.includes(clubID)) {
+            return res.status(200).json({
+                isFollowing: false,
+                message: "User is not following this club."
+            });
+        }
+
+        res.status(200).json({
+            isFollowing: true,
+            message: "User is following this club."
+        });
+    } catch (error) {
+        console.error("Error checking if following club:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+
+module.exports = { addClub, getFollowedClubs, removeClub, isFollowing };

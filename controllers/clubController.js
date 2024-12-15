@@ -125,13 +125,11 @@ const getClubByName = async (req, res) => {
 };
 
 //edit club information 
+//does not work : Error fetching club by ID: Cast to Number failed for value "edit" (type string) at path "clubID" for model "Clubs"
 const editClub = async (req, res) => {
-    
-    /* With auth 
-    const { name, description, category, banner, logo, website, email, verified } = req.body;
-    const userID = req.user.userID; // Assuming `req.user` is populated by an authentication middleware
-    */
-    var { clubID, userID, name, description, banner, logo, website, email } = req.body;
+     
+    const { clubID, name, description, category, banner, logo, website, email} = req.body;
+    const userID = req.user.userID; // Assuming `req.user` is populated by an authentication middleware 
     
     try {
         //mod check
@@ -147,6 +145,11 @@ const editClub = async (req, res) => {
 
         //update only non-null input fields 
         if (name) {
+            //check if not same as another club
+            const sameName = await Club.findOne({name : name}); 
+            if (sameName) {
+                return res.status(400).json({error: "A club with the same name already exists."}); 
+            }
             club.name = name; 
         }
         if (description) {
@@ -166,9 +169,6 @@ const editClub = async (req, res) => {
         }
         if (email) {
             club.email = email; 
-        }
-        if (verified) {
-            club.verified = verified; 
         }
 
         console.log("Attributes updated."); 
