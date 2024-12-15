@@ -116,6 +116,10 @@ const getDashboardPosts = async (req, res) => {
             return res.status(201).json({message: "User does not follow any clubs.", posts: {}}); 
         }
         clubsFollowed = clubsFollowed.clubIDs 
+
+        if (clubsFollowed.length == 0) {
+            return res.status(201).json({message: "User does not follow any clubs.", posts: {}}); 
+        }
          
         //condition array 
         let conditions = [];  
@@ -125,7 +129,10 @@ const getDashboardPosts = async (req, res) => {
         }
 
         //get posts from all clubs followed, sorted by date. limit to postCount 
-        let posts = await Post.find({ $or: conditions}).sort({date: -1}).limit(postCount);  
+        let posts = await Post.find({ $or: conditions}).sort({date: -1}).limit(postCount); 
+        if (posts.length == 0) {
+            return res.status(201).json({message: "No posts found.", posts: {}}); 
+        } 
 
         //return posts for this usr dashboard 
         res.status(201).json({ message: "Posts for this dashboard.", posts: posts });
