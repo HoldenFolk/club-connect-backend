@@ -163,6 +163,7 @@ const deleteUser = async (req, res) => {
 
         //set userID = 0 on posts made by that user, like a deleted flag 
         //not deleting the post
+        /*
         const posts = await Posts.find({userID: userID}); 
         if (posts.length > 0) {
             for (let post of posts) {
@@ -170,6 +171,11 @@ const deleteUser = async (req, res) => {
                 await post.save(); 
             }
         }
+        */
+
+        //delete all posts made by user 
+        const deletedPosts = await Posts.deleteMany({userID: userID}); 
+        console.log(deletedPosts); 
 
         res.status(200).json({message: "User deleted successfully.", user: deletedUser});  
 
