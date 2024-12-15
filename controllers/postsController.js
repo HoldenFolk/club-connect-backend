@@ -36,8 +36,13 @@ const createPost = async (req, res) => {
         }
         
         //create new post 
-        const postCount = await Post.countDocuments(); 
-        const postID = postCount + 1;
+        //const postCount = await Post.countDocuments(); 
+        //const postID = postCount + 1;
+
+
+        //use last available postID --> maybe store it? 
+        const postCount = await Post.find().sort({_id: -1}).limit(1);
+        const postID = postCount[0].postID + 1;  
 
         const date = new Date(); //post date will be date the request was processed 
 
