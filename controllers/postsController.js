@@ -80,9 +80,12 @@ const getClubPosts = async (req, res) => {
         const cID = club.clubID;  
         
         //get n posts. sorted by date, most recent first 
-        const posts = await Post.find({ clubID: cID}).limit(postCount).sort({date: -1});  
+        const posts = await Post.find({ clubID: cID}).limit(postCount).sort({date: -1}); 
+        if (posts.length == 0) {
+            return res.status(201).json({message: "No posts found for this club.", posts: {}}); 
+        } 
 
-        res.status(201).json({ posts });
+        res.status(201).json({ message: "Found posts for this club", posts: posts });
 
     } catch (error) {
         console.error("Error getting club posts:", error);
