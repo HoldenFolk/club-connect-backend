@@ -192,7 +192,7 @@ const searchClub = async (req, res) => {
 
     try {
         //match club name with substring, case insensitive
-        const clubs = await Club.find({name : {$regex : regex, $options: 'i'}}, {clubID: 1, name: 1});  
+        const clubs = await Club.find({name : {$regex : regex, $options: 'i'}}, {clubID: 1, name: 1, logo: 1, description: 1});  
         
         //if empty, return no such club message 
         if (!clubs || (clubs.length == 0)) {
@@ -209,7 +209,7 @@ const searchClub = async (req, res) => {
 //return all clubs, ordered by decreasing number of followers 
 const getDirectory = async (req, res) => {
     try {
-        let dir = await Club.find({}, {clubID: 1, name: 1, logo: 1}).sort({followers: -1}); 
+        let dir = await Club.find({}, {clubID: 1, name: 1, logo: 1, description: 1}).sort({followers: -1}); 
         res.status(201).json({ dir }); 
     } catch (error) {
         res.status(500).json({ error: "Internal server error" });
