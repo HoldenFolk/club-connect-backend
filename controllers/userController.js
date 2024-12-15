@@ -33,8 +33,12 @@ const registerUser = async (req, res) => {
         // });
 
         // Calculate the next userID
-        const userCount = await Users.countDocuments(); // Counts all documents in the Users collection
-        const userID = userCount + 1;
+        //const userCount = await Users.countDocuments(); // Counts all documents in the Users collection
+        //const userID = userCount + 1;
+
+        //find more effective way? 
+        const userCount = await Users.find().sort({_id: -1}).limit(1);
+        const userID = userCount[0].userID + 1;
 
         // Create a new user
         const newUser = new Users({
