@@ -4,68 +4,62 @@ const User = require("../models/User");
 const Moderator = require("../models/Moderator");
 const ClubsFollowed = require("../models/ClubsFollowed");
 
-//Posts(userID, postId, clubId, title, text, imageURL, date) 
 
-//user creates post for a club 
+// User creates post for a club
 const createPost = async (req, res) => {
-    
-    const {clubID, title, text, imageURL} = req.body;
-    const userID = req.user.userID; 
+    const { clubName, title, text, imageURL } = req.body;
+    const userID = req.user.userID;
 
     // Validate mandatory fields
-    if (!userID || !clubID || !title || !text) {
+    if (!userID || !clubName || !title || !text) {
         return res.status(400).json({ error: "Required fields missing" });
-    } 
+    }
 
     try {
-
-        //user and club exists check
-        const club = await Club.findOne({ clubID });
+        // Check if the club exists using clubName
+        const club = await Club.findOne({ name: clubName });
         if (!club) {
             return res.status(404).json({ error: "Club not found." });
         }
+        const clubID = club.clubID;
+
+        // Check if the user exists
         const user = await User.findOne({ userID });
         if (!user) {
             return res.status(404).json({ error: "User not found." });
         }
 
-        //check if poster is a moderator 
+        // Check if the user is a moderator for the club
         const existingMod = await Moderator.findOne({ userID, clubID });
         if (!existingMod) {
             return res.status(400).json({ error: "This user is not a moderator for this club." });
         }
-        
-        //create new post 
-        //const postCount = await Post.countDocuments(); 
-        //const postID = postCount + 1;
 
+        // Determine the new postID
+        const lastPost = await Post.find().sort({ _id: -1 }).limit(1);
+        const postID = lastPost.length > 0 ? lastPost[0].postID + 1 : 1;
 
-        //use last available postID --> maybe store it? 
-        const postCount = await Post.find().sort({_id: -1}).limit(1);
-        const postID = postCount[0].postID + 1;  
+        const date = new Date(); // Set the current date as the post date
 
-        const date = new Date(); //post date will be date the request was processed 
-
-        //add to Posts 
+        // Create a new post
         const newPost = new Post({
             userID,
-            postID, 
-            clubID, 
-            title, 
-            text, 
-            imageURL, 
-            date
+            postID,
+            clubID,
+            title,
+            text,
+            imageURL,
+            date,
         });
+
         const savedPost = await newPost.save();
 
         res.status(201).json({ message: "Post created successfully", post: savedPost });
-
-    } 
-    catch (error) {
-        console.error("Error creating moderator:", error);
+    } catch (error) {
+        console.error("Error creating post:", error);
         res.status(500).json({ error: "Internal server error" });
     }
-}; 
+};
 
 //get all posts for a club (club feed)
 const getClubPosts = async (req, res) => {

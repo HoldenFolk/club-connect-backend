@@ -8,7 +8,7 @@ const router = express.Router();
 router.post("/create", authMiddleware, createClub);
 
 // Route for getting club by ID
-router.get("/:clubID", authMiddleware, getClubById);
+router.get("/:clubID", getClubById);
 
 //Route for getting club by name
 router.get("/name/:name", getClubByName);
