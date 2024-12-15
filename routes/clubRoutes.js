@@ -5,10 +5,10 @@ const authMiddleware = require("../middlewares/authenticate")
 const router = express.Router();
 
 // Route for creating a club (requires authentication)
-router.post("/create", createClub);
+router.post("/create", authMiddleware, createClub);
 
 // Route for getting club by ID
-router.get("/:clubID", getClubById);
+router.get("/:clubID", authMiddleware, getClubById);
 
 //Route for getting club by name
 router.get("/name/:name", getClubByName);
