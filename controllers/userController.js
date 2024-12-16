@@ -25,17 +25,6 @@ const registerUser = async (req, res) => {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Generate a public key for the user
-        // const { publicKey } = crypto.generateKeyPairSync("rsa", {
-        //     modulusLength: 2048,
-        //     publicKeyEncoding: { type: "spki", format: "pem" },
-        //     privateKeyEncoding: { type: "pkcs8", format: "pem" },
-        // });
-
-        // Calculate the next userID
-        //const userCount = await Users.countDocuments(); // Counts all documents in the Users collection
-        //const userID = userCount + 1;
-
         //find more effective way? 
         const userCount = await Users.find().sort({_id: -1}).limit(1);
         const userID = userCount[0].userID + 1;
@@ -77,7 +66,6 @@ const getUserById = async (req, res) => {
             id: user.userID,
             email: user.email,
             username: user.username,
-            publicKey: user.publicKey,
         });
     } catch (error) {
         console.error(error);
@@ -120,8 +108,7 @@ const updateUserById = async (req, res) => {
             user: {
                 id: updatedUser.userID,
                 email: updatedUser.email,
-                username: updatedUser.username,
-                publicKey: updatedUser.publicKey,
+                username: updatedUser.username
             },
         });
     } catch (error) {

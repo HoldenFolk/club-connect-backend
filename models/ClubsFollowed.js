@@ -7,7 +7,7 @@ const clubsFollowedSchema = new mongoose.Schema(
             required: true
         },
         clubIDs: {
-            type: [Number], // Correct way to define an array of Numbers
+            type: [Number],
             ref: "Club"
         }
     },

@@ -64,7 +64,7 @@ const getClubById = async (req, res) => {
     const { clubID } = req.params;
 
     try {
-        // Find the club by MongoDB ID (_id)
+        // Find the club by ID
         const club = await Club.findOne({clubID});
         // const user = await Users.findOne({ userID });
 
@@ -125,7 +125,6 @@ const getClubByName = async (req, res) => {
 };
 
 //edit club information 
-//does not work : Error fetching club by ID: Cast to Number failed for value "edit" (type string) at path "clubID" for model "Clubs"
 const editClub = async (req, res) => {
      
     const { clubID, name, description, category, banner, logo, website, email} = req.body;
