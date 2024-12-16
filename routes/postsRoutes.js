@@ -1,3 +1,5 @@
+//Mina Dobrijevic
+
 const express = require("express");
 const { createPost, getClubPosts, getDashboardPosts, deletePost } = require("../controllers/postsController");
 const authenticate = require("../middlewares/authenticate"); // Middleware to ensure user is logged in

@@ -1,3 +1,4 @@
+//David Holcer and Mina Dobrijevic
 const Club = require("../models/Club");
 const User = require("../models/User");
 const Moderator = require("../models/Moderator");

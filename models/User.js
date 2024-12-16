@@ -1,3 +1,5 @@
+//David Holcer
+
 // Users(userID, email, username, password, publicKey)
 
 const mongoose = require("mongoose");
