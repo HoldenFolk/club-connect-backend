@@ -13,8 +13,7 @@ router.get("/:userID", getUserById);
 // Update user by ID
 router.put("/:userID", updateUserById);
 
-//Delete this user, should be authenticated 
-//router.delete("/delete/:userID", authMiddleware, deleteUser); 
+//Delete this user, should be authenticated  
 router.delete("/delete", authenticate, deleteUser); 
 
 module.exports = router;

@@ -24,19 +24,7 @@ const registerUser = async (req, res) => {
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Generate a public key for the user
-        // const { publicKey } = crypto.generateKeyPairSync("rsa", {
-        //     modulusLength: 2048,
-        //     publicKeyEncoding: { type: "spki", format: "pem" },
-        //     privateKeyEncoding: { type: "pkcs8", format: "pem" },
-        // });
-
-        // Calculate the next userID
-        //const userCount = await Users.countDocuments(); // Counts all documents in the Users collection
-        //const userID = userCount + 1;
-
-        //find more effective way? 
+ 
         const userCount = await Users.find().sort({_id: -1}).limit(1);
         const userID = userCount[0].userID + 1;
 
@@ -46,7 +34,6 @@ const registerUser = async (req, res) => {
             email,
             username,
             password: hashedPassword,
-            // publicKey, // Save the public key
         });
 
         const savedUser = await newUser.save();
@@ -161,17 +148,6 @@ const deleteUser = async (req, res) => {
         const deletedMod = await Moderator.deleteMany({userID: userID}); 
         console.log(deletedMod);
 
-        //set userID = 0 on posts made by that user, like a deleted flag 
-        //not deleting the post
-        /*
-        const posts = await Posts.find({userID: userID}); 
-        if (posts.length > 0) {
-            for (let post of posts) {
-                post.userID = 0; 
-                await post.save(); 
-            }
-        }
-        */
 
         //delete all posts made by user 
         const deletedPosts = await Posts.deleteMany({userID: userID}); 

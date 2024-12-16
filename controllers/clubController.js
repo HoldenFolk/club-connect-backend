@@ -7,7 +7,7 @@ require("dotenv").config();
 // Create a new club
 const createClub = async (req, res) => {
     const { name, description, category, banner, logo, website, email, verified, followers } = req.body;
-    const userID = req.user.userID; // Assuming `req.user` is populated by an authentication middleware
+    const userID = req.user.userID; 
 
     console.log(userID)
 
@@ -38,8 +38,7 @@ const createClub = async (req, res) => {
             email: email || null,
             verified: verified || false,
             followers: 0, 
-            // moderators: [userId] || null, // Add the creator as the first moderator
-            // createdBy: userId || null,
+            
         });
 
         // Add the current user as a moderator for this club
@@ -59,15 +58,14 @@ const createClub = async (req, res) => {
 };
 
 
-// Get a user by their ID
+// Get a club by their ID
 const getClubById = async (req, res) => {
     const { clubID } = req.params;
 
     try {
-        // Find the club by MongoDB ID (_id)
+        // Find the club 
         const club = await Club.findOne({clubID});
-        // const user = await Users.findOne({ userID });
-
+        
         if (!club) {
             return res.status(404).json({ error: "Club not found" });
         }
@@ -125,11 +123,10 @@ const getClubByName = async (req, res) => {
 };
 
 //edit club information 
-//does not work : Error fetching club by ID: Cast to Number failed for value "edit" (type string) at path "clubID" for model "Clubs"
 const editClub = async (req, res) => {
      
     const { clubID, name, description, category, banner, logo, website, email} = req.body;
-    const userID = req.user.userID; // Assuming `req.user` is populated by an authentication middleware 
+    const userID = req.user.userID; 
     
     try {
         //mod check
