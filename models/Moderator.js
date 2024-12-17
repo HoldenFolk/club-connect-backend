@@ -1,4 +1,5 @@
 //Mina Dobrijevic
+
 //Moderators(userId, clubId), pair is unique, single attributes can be repeated
 
 const mongoose = require("mongoose");
