@@ -1,3 +1,4 @@
+//David Holcer
 const mongoose = require("mongoose");
 
 const clubsFollowedSchema = new mongoose.Schema(

@@ -1,3 +1,5 @@
+//Mina Dobrijevic
+
 const express = require("express");
 const { createModerator} = require("../controllers/moderatorController");
 const authMiddleware = require("../middlewares/authenticate"); // Middleware to ensure user is logged in

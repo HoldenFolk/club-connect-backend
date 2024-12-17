@@ -1,3 +1,5 @@
+//Mina Dobrijevic
+
 const Club = require("../models/Club");
 const Post = require("../models/Post");
 const User = require("../models/User");

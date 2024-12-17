@@ -1,3 +1,5 @@
+//Mina Dobrijevic
+
 //Posts(userID, postId, clubId, title, text, imageURL, date) 
 
 const mongoose = require("mongoose"); 

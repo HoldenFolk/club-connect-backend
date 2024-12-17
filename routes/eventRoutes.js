@@ -1,3 +1,5 @@
+//David Holcer
+
 const express = require("express");
 const { createEvent, getEventsByClub, deleteEvent } = require("../controllers/eventController");
 const authMiddleware = require("../middlewares/authenticate"); // Middleware to ensure user is logged in

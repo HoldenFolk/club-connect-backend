@@ -1,3 +1,5 @@
+//Mina Dobrijevic
+
 const Club = require("../models/Club");
 const Moderator = require("../models/Moderator");
 const User = require("../models/User"); 

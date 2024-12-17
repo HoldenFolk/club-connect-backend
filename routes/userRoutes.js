@@ -1,3 +1,5 @@
+//David Holcer and Mina Dobrijevic
+
 const express = require("express");
 const { registerUser, getUserById, updateUserById, deleteUser } = require("../controllers/userController");
 const authenticate = require("../middlewares/authenticate"); 

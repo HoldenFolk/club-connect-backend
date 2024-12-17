@@ -1,3 +1,5 @@
+//David Holcer and Mina Dobrijevic
+
 const bcrypt = require("bcryptjs");
 const Users = require("../models/User");
 const ClubsFollowed = require("../models/ClubsFollowed");

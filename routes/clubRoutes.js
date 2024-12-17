@@ -1,3 +1,5 @@
+//David Holcer and Mina Dobrijevic
+
 const express = require("express");
 const { createClub, getClubById, getClubByName, searchClub, editClub, getDirectory } = require("../controllers/clubController");
 const authMiddleware = require("../middlewares/authenticate")

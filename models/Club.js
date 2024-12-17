@@ -1,3 +1,4 @@
+//David Holcer
 // Clubs(clubID, description, logo, banner, category, website, email)
 
 const mongoose = require("mongoose");
