@@ -20,6 +20,6 @@ router.get("/search/:regex", searchClub);
 router.post("/edit", authMiddleware,  editClub); 
 
 //not private
-router.get("/dir", getDirectory); 
+router.get("/searchAll/dir", getDirectory); 
 
 module.exports = router;

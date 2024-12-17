@@ -11,8 +11,7 @@ const signToken = (payload) => {
     return jwt.sign(
         {
             id: payload.id,
-            username: payload.username,
-            publicKey: payload.publicKey // Include public key in token payload
+            username: payload.username
         },
         privateKey,
         {

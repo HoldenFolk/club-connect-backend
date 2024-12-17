@@ -64,7 +64,6 @@ const getUserById = async (req, res) => {
             id: user.userID,
             email: user.email,
             username: user.username,
-            publicKey: user.publicKey,
         });
     } catch (error) {
         console.error(error);
@@ -107,8 +106,7 @@ const updateUserById = async (req, res) => {
             user: {
                 id: updatedUser.userID,
                 email: updatedUser.email,
-                username: updatedUser.username,
-                publicKey: updatedUser.publicKey,
+                username: updatedUser.username
             },
         });
     } catch (error) {

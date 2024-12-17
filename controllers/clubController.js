@@ -63,7 +63,7 @@ const getClubById = async (req, res) => {
     const { clubID } = req.params;
 
     try {
-        // Find the club 
+        // Find the club by ID
         const club = await Club.findOne({clubID});
         
         if (!club) {

@@ -17,7 +17,6 @@ const clubSchema = new mongoose.Schema({
     category: String,
     website: String,
     email: String
-    
 },
     {
         timestamps: true,
